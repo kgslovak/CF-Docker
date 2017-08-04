@@ -1,0 +1,27 @@
+Custom Dockerfile to build ROS Kinetic (basic desktop version)
+
+Includes rqt, rviz, and robot-generic libraries
+Does NOT include 2D/3D simulators, navigation and 2D/3D perception
+Last Updated: 2017-07-25
+
+- Recommended build command (from "ros/kinetic-desktop" directory):
+
+	docker build --no-cache -t ros:kinetic-desktop .
+
+- Launch main container with the following command chain:
+
+	xhost +local:root && \
+	docker run -it --rm --privileged \
+		--name ROS_KIN \
+		--network=host \
+		-e DISPLAY=$DISPLAY \
+		-v /tmp/.X11-unix:/tmp/.X11-unix:rw \
+		-v /dev/bus/usb:/dev/bus/usb:rw \
+		-v PATH-TO-DIR/Include-on-Run/alias-scripts:/bin/aliases:rw \
+		-v PATH-TO-DIR/Include-on-Run/ROS_WS:/ROS_WS:rw \
+		ros:kinetic-desktop
+
+- Open another bash terminal in this container (from second host-terminal) with:
+
+	docker exec -it ROS_KIN bash -c \
+		"source /opt/ros/kinetic/setup.bash && bash"

@@ -1,0 +1,19 @@
+Out-of-the-box implementation of Bitcraze PC Client for Crazyflies
+
+Succesfully tested on Ubuntu 16.04
+Last Updated: 2017-07-25
+
+- Recommended build command (from "cf_client/basic" directory):
+
+	docker build --no-cache -t cf_client:basic .
+
+- Launch PC Client in a container with the following command chain:
+
+	xhost +local:root && \
+	docker run -it --rm --privileged \
+		--name CF_CLIENT \
+		-e DISPLAY=$DISPLAY \
+		-v /tmp/.X11-unix:/tmp/.X11-unix:rw \
+		-v /dev/bus/usb:/dev/bus/usb:rw \
+		-v PATH-TO-DIR/Include-on-Run/cf_firmware:/cf_firmware:rw \
+		cf_client:basic

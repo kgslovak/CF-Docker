@@ -1,0 +1,9 @@
+#! /bin/bash
+
+roslaunch crazyflie_demo hover_vrpn_104.launch \
+	server:=192.168.2.107 \
+	uri:=radio://0/80/2M/E7E7E7E701 \
+	frame:=crazyflie \
+	x:=0 \
+	y:=0 \
+	z:=1

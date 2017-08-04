@@ -1,0 +1,36 @@
+Out-of-the-box implementation of crazyflie_ros package
+
+MoCapSys: VRPN (Tested with Optitrack)
+Last Updated: 2017-07-25
+
+- Recommended build command (from "crazyflie_ros/basic-vrpn" directory):
+
+	docker build --no-cache -t crazyflie_ros:basic-vrpn .
+
+- Before using this image, run the following chain to export directories which will be
+  modified later:
+
+	docker create \
+		--name FIRST_CF_ROS \
+		crazyflie_ros:basic-vrpn && \
+	docker cp FIRST_CF_ROS:/CF_WS/. PATH-TO-DIR/Include-on-Run/CF_WS && \
+	cp PATH-TO-DIR/Initial-Imports/cfdemo-launch/* PATH-TO-DIR/Include-on-Run/CF_WS/src/crazyflie_ros/crazyflie_demo/launch/ && \
+	docker rm -f FIRST_CF_ROS
+
+- Launch main container with the following command chain:
+
+	xhost +local:root && \
+	docker run -it --rm --privileged \
+		--name CF_ROS \
+		--network=host \
+		-e DISPLAY=$DISPLAY \
+		-v /tmp/.X11-unix:/tmp/.X11-unix:rw \
+		-v /dev/bus/usb:/dev/bus/usb:rw \
+		-v PATH-TO-DIR/Include-on-Run/alias-scripts:/bin/aliases:rw \
+		-v PATH-TO-DIR/Include-on-Run/CF_WS:/CF_WS:rw \
+		crazyflie_ros:basic-vrpn
+
+- Open another bash terminal in this container (from second host-terminal) with:
+
+	docker exec -it CF_ROS bash -c \
+		"source /cf_ws/devel/setup.bash && bash"
